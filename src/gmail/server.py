@@ -11,8 +11,14 @@ from base64 import urlsafe_b64decode
 from email import message_from_bytes
 import webbrowser
 
-#Replace this with your own venv
-venv_path = "/Users/hngnam25/mcp-gmail/.venv"
+#Make sure to load the .env file with your own directory to this repo
+MCP_GMAIL_ROOT = os.getenv("MCP_GMAIL_ROOT") 
+
+if not MCP_GMAIL_ROOT:
+    raise ValueError("MCP_GMAIL_ROOT environment variable not set. Please define it in your .env file.")
+
+# Load venv in case your global environment does not have the right package
+venv_path = os.path.join(MCP_GMAIL_ROOT,".venv")
 if not sys.prefix == venv_path:
     # If not in the right venv, restart the script in the correct environment
     os.execl(f"{venv_path}/bin/python", "python", __file__)
@@ -532,16 +538,15 @@ async def main(creds_file_path: str,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Gmail API MCP Server')
-    
-    #change this to your root directory as needed
-    CONFIG_DIR = "/Users/hngnam25/mcp-gmail"
-    os.makedirs(CONFIG_DIR, exist_ok=True)
+
+    creds_file_path = os.path.join(MCP_GMAIL_ROOT,"gcp-oauth.keys.json")
+    token_path = os.path.join(MCP_GMAIL_ROOT,"app_tokens.json")
 
     parser.add_argument('--creds-file-path', 
-                    default="/Users/hngnam25/mcp-gmail/gcp-oauth.keys.json",
+                    default=creds_file_path,
                     help='OAuth 2.0 credentials file path')
     parser.add_argument('--token-path',
-                    default="/Users/hngnam25/mcp-gmail/app_tokens.json",
+                    default=token_path,
                     help='Token storage path')
     
     args = parser.parse_args()
