@@ -54,12 +54,74 @@ If using `direnv`, run:
 direnv allow
 ```
 
-### 5. OAuth 2.0 Credentials
 
-1. Create a project in the [Google Cloud Console](https://console.cloud.google.com/)
-2. Enable the Gmail API
-3. Create OAuth 2.0 credentials and download the JSON file
-4. Save the credentials file as `gcp-oauth.keys.json` in the project root
+### 5. Gmail API Setup
+
+1. [Create a new Google Cloud project](https://console.cloud.google.com/projectcreate)
+2. [Enable the Gmail API](https://console.cloud.google.com/workspace-api/products)
+3. [Configure an OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent) 
+    - Select "external". However, we will not publish the app.
+    - Add your personal email address as a "Test user".
+4. Add OAuth scope `https://www.googleapis.com/auth/gmail/modify`
+5. [Create an OAuth Client ID](https://console.cloud.google.com/apis/credentials/oauthclient) for application type "Desktop App"
+6. Download the JSON file of your client's OAuth keys
+7. Rename the key file and save it to your local machine in a secure location. Take note of the location.
+    - The absolute path to this file will be passed as parameter `--creds-file-path` when the server is started. 
+
+### OAuth Consent
+
+On first run, the application will open a browser window for OAuth consent. After granting permission, your credentials will be saved to the specified token path for future use.
+
+Token credentials will be subsequently saved (and later retrieved) in the absolute file path passed to parameter `--token-path`.
+
+For example, you may use a dot directory in your home folder, replacing `[your-home-folder]`.:
+
+| Parameter       | Example                                          |
+|-----------------|--------------------------------------------------|
+| `--creds-file-path` | `/[your-home-folder]/.google/client_creds.json` |
+| `--token-path`      | `/[your-home-folder]/.google/app_tokens.json`    |
+
+
+### Usage with Desktop App
+
+Using [uv](https://docs.astral.sh/uv/) is recommended.
+
+To integrate this server with Claude Desktop as the MCP Client, add the following to your app's server configuration. By default, this is stored as `~/Library/Application\ Support/Claude/claude_desktop_config.json`. 
+
+```json
+{
+  "mcpServers": {
+    "gdrive": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "[absolute-path-to-git-repo]",
+        "run",
+        "gmail",
+        "--creds-file-path",
+        "[absolute-path-to-credentials-file]",
+        "--token-path",
+        "[absolute-path-to-access-tokens-file]"
+      ]
+    }
+  }
+}
+```
+
+The following parameters must be set
+| Parameter       | Example                                          |
+|-----------------|--------------------------------------------------|
+| `--directory`   | Absolute path to `gmail` directory containing server |
+| `--creds-file-path` | Absolute path to credentials file created in Gmail API Setup. |
+| `--token-path`      | Absolute path to store and retrieve access and refresh tokens for application.  |
+
+Sometimes uv would not load properly, make sure to inspect your own terminal and type 
+
+```bash
+which uv
+```
+to replace the uv command
+
 
 ## Usage
 
@@ -100,9 +162,6 @@ python src/gmail/server.py --creds-file-path "/path/to/credentials.json" --token
 | `mark-email-as-read` | Mark an email as read |
 | `open-email` | Open an email in the browser |
 
-## OAuth Consent
-
-On first run, the application will open a browser window for OAuth consent. After granting permission, your credentials will be saved to the specified token path for future use.
 
 ## Project Structure
 
