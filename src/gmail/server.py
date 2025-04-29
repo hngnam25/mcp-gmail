@@ -1,27 +1,33 @@
-from typing import Any
-import argparse
 import os
-import asyncio
-import logging
-import base64
 import sys
-from email.message import EmailMessage
-from email.header import decode_header
-from base64 import urlsafe_b64decode
-from email import message_from_bytes
-import webbrowser
 
-#Make sure to load the .env file with your own directory to this repo
-MCP_GMAIL_ROOT = os.getenv("MCP_GMAIL_ROOT") 
+# Get the absolute path of the current script
+script_path = os.path.abspath(__file__)
+# Get the directory containing the script
+script_dir = os.path.dirname(script_path)
+# Navigate up from src/gmail to the root directory
+MCP_GMAIL_ROOT = os.path.abspath(os.path.join(script_dir, "../.."))
 
 if not MCP_GMAIL_ROOT:
     raise ValueError("MCP_GMAIL_ROOT environment variable not set. Please define it in your .env file.")
-
+    
 # Load venv in case your global environment does not have the right package
 venv_path = os.path.join(MCP_GMAIL_ROOT,".venv")
 if not sys.prefix == venv_path:
     # If not in the right venv, restart the script in the correct environment
     os.execl(f"{venv_path}/bin/python", "python", __file__)
+
+from typing import Any
+import argparse
+import asyncio
+import logging
+import base64
+
+from email.message import EmailMessage
+from email.header import decode_header
+from base64 import urlsafe_b64decode
+from email import message_from_bytes
+import webbrowser
 
 from mcp.server.models import InitializationOptions
 import mcp.types as types

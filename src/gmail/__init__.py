@@ -4,6 +4,7 @@ import argparse
 
 def main():
     """Main entry point for the package."""
+    
     parser = argparse.ArgumentParser(description='Gmail API MCP Server')
     parser.add_argument('--creds-file-path',
                         required=True,
