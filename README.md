@@ -82,7 +82,7 @@ For example, you may use a dot directory in your home folder, replacing `[your-h
 | `--token-path`      | `/[your-home-folder]/.google/app_tokens.json`    |
 
 
-### Usage with Desktop App
+### 7. Usage with Desktop App
 
 Using [uv](https://docs.astral.sh/uv/) is recommended.
 
