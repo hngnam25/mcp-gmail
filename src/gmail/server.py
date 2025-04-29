@@ -36,6 +36,22 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 
+# Constants
+GMAIL_SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
+SERVER_NAME = "gmail"
+SERVER_VERSION = "0.1.0"
+
+PROMPT_MANAGE_EMAIL = "manage-email"
+PROMPT_DRAFT_EMAIL = "draft-email"
+PROMPT_EDIT_DRAFT = "edit-draft"
+
+TOOL_SEND_EMAIL = "send-email"
+TOOL_TRASH_EMAIL = "trash-email"
+TOOL_GET_UNREAD_EMAILS = "get-unread-emails"
+TOOL_READ_EMAIL = "read-email"
+TOOL_MARK_AS_READ = "mark-email-as-read"
+TOOL_OPEN_EMAIL = "open-email"
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -55,13 +71,13 @@ Always ask for approval if not already given.
 
 # Define available prompts
 PROMPTS = {
-    "manage-email": types.Prompt(
-        name="manage-email",
+    PROMPT_MANAGE_EMAIL: types.Prompt(
+        name=PROMPT_MANAGE_EMAIL,
         description="Act like an email administator",
         arguments=None,
     ),
-    "draft-email": types.Prompt(
-        name="draft-email",
+    PROMPT_DRAFT_EMAIL: types.Prompt(
+        name=PROMPT_DRAFT_EMAIL,
         description="Draft an email with cotent and recipient",
         arguments=[
             types.PromptArgument(
@@ -81,8 +97,8 @@ PROMPTS = {
             ),
         ],
     ),
-    "edit-draft": types.Prompt(
-        name="edit-draft",
+    PROMPT_EDIT_DRAFT: types.Prompt(
+        name=PROMPT_EDIT_DRAFT,
         description="Edit the existing email draft",
         arguments=[
             types.PromptArgument(
@@ -119,7 +135,7 @@ class GmailService:
     def __init__(self,
                  creds_file_path: str,
                  token_path: str,
-                 scopes: list[str] = ['https://www.googleapis.com/auth/gmail.modify']):
+                 scopes: list[str] = GMAIL_SCOPES):
         logger.info(f"Initializing GmailService with creds file: {creds_file_path}")
         self.creds_file_path = creds_file_path
         self.token_path = token_path
