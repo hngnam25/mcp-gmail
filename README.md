@@ -68,7 +68,7 @@ direnv allow
 7. Rename the key file and save it to your local machine in a secure location. Take note of the location.
     - The absolute path to this file will be passed as parameter `--creds-file-path` when the server is started. 
 
-### OAuth Consent
+### 6. OAuth Consent
 
 On first run, the application will open a browser window for OAuth consent. After granting permission, your credentials will be saved to the specified token path for future use.
 
@@ -78,7 +78,7 @@ For example, you may use a dot directory in your home folder, replacing `[your-h
 
 | Parameter       | Example                                          |
 |-----------------|--------------------------------------------------|
-| `--creds-file-path` | `/[your-home-folder]/.google/client_creds.json` |
+| `--creds-file-path` | `/[your-home-folder]/.google/gcp-oauth.keys.json` |
 | `--token-path`      | `/[your-home-folder]/.google/app_tokens.json`    |
 
 
@@ -107,6 +107,7 @@ To integrate this server with Claude Desktop as the MCP Client, add the followin
   }
 }
 ```
+I would like to think that I have configured everything in my program, but just to be safe 
 
 The following parameters must be set
 | Parameter       | Example                                          |
